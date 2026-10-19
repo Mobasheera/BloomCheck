@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="132" viewBox="0 0 560 132" role="img" aria-labelledby="title desc">
+  <title id="title">BloomCheck logo</title>
+  <desc id="desc">A nine-cell multicolour Bloom filter mark beside the BloomCheck wordmark.</desc>
+  <rect width="560" height="132" rx="22" fill="#ffffff"/>
+  <g transform="translate(28 37) rotate(-5 29 29)">
+    <rect x="0" y="0" width="16" height="16" rx="4" fill="#1a73e8"/>
+    <rect x="22" y="0" width="16" height="16" rx="4" fill="#34a853"/>
+    <rect x="44" y="0" width="16" height="16" rx="4" fill="#fbbc04"/>
+    <rect x="0" y="22" width="16" height="16" rx="4" fill="#34a853"/>
+    <rect x="22" y="22" width="16" height="16" rx="4" fill="#1a73e8"/>
+    <rect x="44" y="22" width="16" height="16" rx="4" fill="#ea4335"/>
+    <rect x="0" y="44" width="16" height="16" rx="4" fill="#fbbc04"/>
+    <rect x="22" y="44" width="16" height="16" rx="4" fill="#34a853"/>
+    <rect x="44" y="44" width="16" height="16" rx="4" fill="#1a73e8"/>
+  </g>
+  <text x="112" y="82" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="700" letter-spacing="-1.5" fill="#202124">Bloom<tspan fill="#1a73e8">Check</tspan></text>
+  <text x="115" y="105" font-family="Arial, Helvetica, sans-serif" font-size="13" letter-spacing="1.6" fill="#5f6368">CHECK SMARTER. UNDERSTAND EVERY BIT.</text>
+</svg>
