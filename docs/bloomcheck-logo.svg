@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="560" height="132" viewBox="0 0 560 132" role="img" aria-labelledby="title desc">
-  <title id="title">BloomCheck logo</title>
-  <desc id="desc">A nine-cell multicolour Bloom filter mark beside the BloomCheck wordmark.</desc>
+  <title id="title">BloomCheck</title>
+  <desc id="desc">A colourful nine-cell bit-grid beside the BloomCheck wordmark.</desc>
   <rect width="560" height="132" rx="22" fill="#ffffff"/>
   <g transform="translate(28 37) rotate(-5 29 29)">
     <rect x="0" y="0" width="16" height="16" rx="4" fill="#1a73e8"/>
