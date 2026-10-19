@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f9fa">
+  <meta name="description" content="An interactive, educational Bloom filter email availability checker and visualizer.">
+  <title>BloomCheck — Bloom Filter Visualizer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="BloomCheck home">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      <span>Bloom<span class="brand-blue">Check</span></span>
+    </a>
+    <div class="topbar-right"><span class="local-indicator"><span></span> Local demo</span><a class="github-link" href="https://github.com/Mobasheera/BloomCheck" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a></div>
+  </header>
+
+  <main class="page-shell">
+    <section class="intro-row">
+      <div>
+        <p class="eyebrow">BIG DATA ANALYTICS · MINI PROJECT</p>
+        <h1>A little bit of probability.<br><span>A lot of efficiency.</span></h1>
+        <p class="intro-copy">See how a Bloom filter screens email addresses in milliseconds — then watch an exact database lookup confirm the answer.</p>
+      </div>
+      <div class="intro-stats" aria-label="Project parameters">
+        <div class="intro-stat"><strong id="intro-record-count">1,000</strong><span>sample addresses</span></div>
+        <div class="intro-stat"><strong id="intro-capacity">10,000</strong><span>filter bits</span></div>
+        <div class="intro-stat"><strong id="intro-hashes">7</strong><span>hash positions</span></div>
+      </div>
+    </section>
+
+    <div class="workspace">
+      <section class="panel checker-panel" aria-labelledby="checker-heading">
+        <div class="panel-heading"><div class="heading-icon blue-icon" aria-hidden="true">@</div><div><p class="section-kicker">MEMBERSHIP CHECK</p><h2 id="checker-heading">Check an email address</h2></div></div>
+        <p class="muted lead-copy">Try a sample address to see how BloomCheck makes its decision. This is an educational demo, not a real account service.</p>
+
+        <form id="check-form" novalidate>
+          <label for="email-input">Email address</label>
+          <div class="input-wrap"><span class="input-symbol" aria-hidden="true">✉</span><input id="email-input" name="email" type="email" placeholder="you@example.com" autocomplete="off" spellcheck="false" maxlength="254" required><button id="clear-input" class="clear-input" type="button" aria-label="Clear email input" title="Clear">×</button></div>
+          <p class="field-hint">Sample registered addresses use <code>example.com</code>.</p>
+          <button id="check-button" class="primary-button" type="submit"><span class="button-label">Check availability</span><span class="button-arrow" aria-hidden="true">→</span></button>
+          <p id="form-error" class="inline-error" role="alert" hidden></p>
+        </form>
+
+        <div id="result-card" class="result-card result-empty" aria-live="polite" aria-atomic="true">
+          <div id="result-symbol" class="result-symbol" aria-hidden="true"><span>⌕</span></div>
+          <div class="result-content"><p id="result-overline" class="result-overline">READY WHEN YOU ARE</p><h3 id="result-title">Your result will appear here</h3><p id="result-description">Enter an email address above to inspect its hash positions and bit values.</p></div>
+        </div>
+
+        <div class="history-block"><div class="subheading-row"><h3>Recent checks</h3><button id="clear-visualization" class="text-button" type="button">Clear view</button></div><div id="history-list" class="history-list"><p class="empty-note">Your recent checks will show up here.</p></div></div>
+
+        <div class="privacy-note"><span aria-hidden="true">ⓘ</span><p>Only synthetic sample data is stored. Submitted checks are kept in temporary memory for this running app and aren’t written to the database.</p></div>
+      </section>
+
+      <section class="panel inspector-panel" aria-labelledby="inspector-heading">
+        <div class="panel-heading inspector-heading"><div class="heading-icon violet-icon" aria-hidden="true">⌘</div><div><p class="section-kicker">UNDER THE HOOD</p><h2 id="inspector-heading">Algorithm inspector</h2></div><span id="backend-status" class="status-pill"><span></span> Connected</span></div>
+        <p class="muted lead-copy">Live state from the actual backend filter — no illustrative bit values.</p>
+
+        <div class="metric-grid">
+          <div class="metric-card"><div class="metric-label">BIT CAPACITY <span class="metric-dot dot-blue"></span></div><div id="metric-capacity" class="metric-value">10,000</div><div class="metric-foot">total positions</div></div>
+          <div class="metric-card"><div class="metric-label">SET BITS <span class="metric-dot dot-green"></span></div><div id="metric-set-bits" class="metric-value">—</div><div id="metric-set-foot" class="metric-foot">bits switched on</div></div>
+          <div class="metric-card"><div class="metric-label">BIT OCCUPANCY <span class="metric-dot dot-violet"></span></div><div id="metric-occupancy" class="metric-value">—</div><div class="progress-track"><div id="occupancy-bar" class="progress-fill"></div></div></div>
+          <div class="metric-card"><div class="metric-label">THEORETICAL FPR <span class="metric-dot dot-amber"></span></div><div id="metric-fpr" class="metric-value">—</div><div class="metric-foot">idealized estimate</div></div>
+        </div>
+
+        <div class="section-divider"><span>QUERY TRACE</span><span id="query-trace-meta">Waiting for a check</span></div>
+        <div class="trace-card">
+          <div class="trace-top"><div><h3>Hash positions</h3><p>Each hash maps the address to a bit in the filter.</p></div><span id="trace-count" class="count-pill">7 positions</span></div>
+          <div id="hash-position-list" class="position-list"><p class="trace-placeholder">Check an email to reveal its positions.</p></div>
+          <div class="bit-legend"><span><i class="legend-dot set"></i>Bit = 1</span><span><i class="legend-dot unset"></i>Bit = 0</span><span><i class="legend-dot changed"></i>Insertion changed</span></div>
+        </div>
+
+        <div class="trace-card bit-map-card">
+          <div class="trace-top"><div><h3>Filter bit map</h3><p>A sampled view of the live bit array. Selected positions are highlighted.</p></div><span id="map-range" class="count-pill">10,000 bits</span></div>
+          <div id="bit-map" class="bit-map" aria-label="Bloom filter bit map"><span class="map-placeholder">Loading bit array…</span></div>
+          <div class="map-footer"><span><i class="legend-dot set"></i>Set</span><span><i class="legend-dot unset"></i>Unset</span><span><i class="legend-dot selected"></i>Queried</span><span id="map-sampled">Showing a representative 1,000-bit window</span></div>
+        </div>
+
+        <div class="decision-card"><div class="decision-heading"><h3>Decision path</h3><span id="decision-badge" class="decision-badge neutral">Awaiting query</span></div><div class="decision-steps"><div id="step-bloom" class="decision-step"><span class="step-number">1</span><div><strong>Bloom filter screen</strong><p id="step-bloom-text">The filter checks the bit at each calculated position.</p></div><span class="step-state">—</span></div><div id="step-database" class="decision-step"><span class="step-number">2</span><div><strong>Exact SQLite lookup</strong><p id="step-database-text">Only a possible match needs an exact lookup.</p></div><span class="step-state">—</span></div><div id="step-final" class="decision-step"><span class="step-number">3</span><div><strong>Final availability</strong><p id="step-final-text">The final result is based on the synchronized reference data.</p></div><span class="step-state">—</span></div></div></div>
+      </section>
+    </div>
+
+    <section class="learning-section">
+      <div class="learning-header"><div><p class="section-kicker">LEARN BY EXPLORING</p><h2>Make the algorithm visible.</h2><p class="muted">A Bloom filter is a screen, not a source of truth. Use these tools to see why.</p></div></div>
+      <div class="learning-grid">
+        <article class="learning-card"><div class="learning-card-icon blue-soft" aria-hidden="true">＋</div><h3>Insertion simulator</h3><p>See which bits a new email would set — and which are already set. This is a simulation, so the reference collection remains unchanged.</p><form id="insert-form" class="mini-form"><label for="insert-input">Email to simulate</label><div class="mini-input-row"><input id="insert-input" type="email" placeholder="new@example.org" required maxlength="254"><button class="secondary-button" type="submit">Simulate</button></div></form><div id="insert-output" class="demo-output" aria-live="polite">Run a simulation to inspect insertion changes.</div></article>
+        <article class="learning-card"><div class="learning-card-icon amber-soft" aria-hidden="true">≈</div><h3>Find a false positive</h3><p>Search deterministic synthetic non-members for a genuine case where all bits are set. SQLite confirms every candidate before it is shown.</p><button id="false-positive-button" class="secondary-button full-button" type="button">Find a false positive <span aria-hidden="true">→</span></button><div id="false-positive-output" class="demo-output" aria-live="polite">No result is fabricated; the search stops after a fixed limit.</div></article>
+        <article class="learning-card"><div class="learning-card-icon green-soft" aria-hidden="true">↗</div><h3>Performance experiment</h3><p>Compare a linear scan, indexed SQLite lookup, and Bloom filter screening with exact verification for possible matches.</p><a class="secondary-button full-button link-button" href="/benchmark">Open benchmark <span aria-hidden="true">→</span></a><p class="small-note">Measurements depend on the machine and this sample's size; speedups are not guaranteed.</p></article>
+      </div>
+    </section>
+
+    <section class="explainer-panel"><div class="explainer-title"><div class="heading-icon blue-icon" aria-hidden="true">i</div><div><p class="section-kicker">THE CORE IDEA</p><h2>How BloomCheck decides</h2></div></div><div class="explainer-grid"><div><span class="explainer-number">01</span><h3>Hash the address</h3><p>SHA-256 digests are used with double hashing to calculate seven repeatable bit positions.</p></div><div><span class="explainer-number">02</span><h3>Read the bits</h3><p>If any checked bit is 0, this filter rules the address out. If every bit is 1, the address is only a possible match.</p></div><div><span class="explainer-number">03</span><h3>Verify exactly</h3><p>Possible matches are checked against SQLite. This distinguishes a real member from a false positive.</p></div></div><div class="caveat-banner"><span aria-hidden="true">ⓘ</span><p><strong>Important:</strong> BloomCheck is an educational project inspired by account-registration workflows. It is not affiliated with Google and makes no claim about Google's internal systems.</p></div></section>
+    <footer class="footer"><span>BloomCheck · BDA Mini Project</span><span>Built to make probabilistic data structures easier to understand.</span><a href="https://github.com/Mobasheera/BloomCheck" target="_blank" rel="noreferrer">View source ↗</a></footer>
+  </main>
+</body>
+</html>
